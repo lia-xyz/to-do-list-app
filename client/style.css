@@ -1,0 +1,91 @@
+body {
+    margin-top: 50px;
+    text-align: center;
+    font-family: 'Courier New';
+    background-color: #7094C4;
+    color: white;
+}
+
+#full-app { 
+    background-color: #436da3;
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid white;
+    border-radius: 15px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    color: white;
+    font-family: 'Courier New';
+}
+
+#input-box, #input-button {
+    border-radius: 5px;
+    padding: 10px; 
+}
+
+#input-box {
+    width: 200px;
+    border: 1px solid #7094C4;
+    font-family: 'Courier New';
+}
+
+#input-button {
+    background-color: #7094C4;
+}
+
+#input-button:hover {
+    background-color: #7094c485;
+}
+
+#task-list {
+    margin-top: 20px;
+}
+
+#all-button, #completed-button, #uncompleted-button {
+    background: none;
+    text-decoration: underline;
+}
+
+#all-button:hover, #completed-button:hover, #uncompleted-button:hover {
+    color: #ffffff9a;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 20px;
+}
+
+li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.delete-button {
+    float: right;
+    background: none;
+    border-radius: 3px;
+    width: 20px;
+    height: 20px;
+}
+
+.delete-button:hover {
+    background-color: #ff0000d0;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #ffffff7f;
+}
