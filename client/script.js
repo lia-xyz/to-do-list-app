@@ -67,7 +67,7 @@ async function addTask() {
         taskInput.value = '';
 
         if (currentFilter === 'all' || (currentFilter === 'uncompleted' && !newTask.completed)) {
-            document.getElementById('taskList').appendChild(createTaskElement(newTask));
+            document.getElementById('tasks').appendChild(createTaskElement(newTask));
         }
 
     } catch (err) {
