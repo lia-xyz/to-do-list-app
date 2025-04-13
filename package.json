@@ -4,7 +4,7 @@
   "type": "module",
   "main": "server/server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha server/test/tasks.test.js",
+    "test": "cross-env NODE_ENV=test mocha server/test/tasks.test.js --exit",
     "start": "node server/server.js"
   },
   "keywords": [],

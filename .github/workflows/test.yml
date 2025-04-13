@@ -47,7 +47,13 @@ jobs:
 
     - name: Create test table
       run: |
-        PGPASSWORD=${{ secrets.DB_PASSWORD }} psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -c "CREATE TABLE IF NOT EXISTS tasks (id SERIAL PRIMARY KEY, title TEXT, completed BOOLEAN DEFAULT false);"
+        PGPASSWORD=${{ secrets.DB_PASSWORD }} psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -f - <<EOF
+        CREATE TABLE IF NOT EXISTS tasks (
+            id SERIAL PRIMARY KEY, 
+            title TEXT, 
+            completed BOOLEAN DEFAULT false
+        );
+        EOF
 
     - name: Run tests
       run: npm test

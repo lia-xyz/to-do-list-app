@@ -5,6 +5,22 @@ import db from '../config/db.js';
 
 describe('Tasks API', () => {
 
+    before(async () => {
+        console.log('Setting up database...');
+        try {
+            // Create the tasks table if it doesn't exist
+            await db.query(`
+                CREATE TABLE IF NOT EXISTS tasks (
+                    id SERIAL PRIMARY KEY,
+                    title VARCHAR(255) NOT NULL,
+                    completed BOOLEAN DEFAULT false
+                )
+            `);
+        } catch (err) {
+            console.error('Error creating tasks table:', err);
+        }
+    });
+
     before(async () => {  
         console.log('Cleaning up...');
         try {
