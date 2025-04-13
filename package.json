@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha \"server/test/tasks.test.js\"",
+    "test": "NODE_ENV=test mocha \"server/test/tasks.test.js\"",
     "start": "node server/server.js"
   },
   "keywords": [],
