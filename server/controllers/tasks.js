@@ -1,8 +1,8 @@
-const validator = require('validator');
+import validator from 'validator';
 
-const db = require('../config/db.js');
+import db from '../config/db.js';
 
-exports.getTasks = async (req, res, next) => {
+export const getTasks = async (req, res, next) => {
     const { completed } = req.query;
 
     let query = 'SELECT * FROM tasks';
@@ -28,7 +28,7 @@ exports.getTasks = async (req, res, next) => {
     }
 };
 
-exports.addTask = async (req, res, next) => {
+export const addTask = async (req, res, next) => {
     const { title } = req.body;
 
     if (!title) return res.status(400).send({status: 'Bad request', message: 'Title is required'});
@@ -47,7 +47,7 @@ exports.addTask = async (req, res, next) => {
     }
 };
 
-exports.updateTask = async (req, res, next) => {
+export const updateTask = async (req, res, next) => {
     const { id } = req.params;
 
     if (!validator.isNumeric(id, { no_symbols: true }) || parseInt(id) <= 0) {
@@ -79,7 +79,7 @@ exports.updateTask = async (req, res, next) => {
     }
 };
 
-exports.deleteTask = async (req, res, next) => {
+export const deleteTask = async (req, res, next) => {
     const { id } = req.params;
 
     if (!validator.isNumeric(id, { no_symbols: true }) || parseInt(id) <= 0) {

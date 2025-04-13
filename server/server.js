@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
-const tasksRouter = require('./routes/tasks.js');
+import tasksRouter from './routes/tasks.js';
 
 const app = express();
 
@@ -16,4 +16,4 @@ app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
-module.exports = app; 
+export default app; 

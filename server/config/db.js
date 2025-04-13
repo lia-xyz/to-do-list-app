@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config({ path: 'server/config/testconfig.env' });
@@ -6,7 +6,9 @@ if (process.env.NODE_ENV === 'test') {
   dotenv.config({ path: 'server/config/config.env' });
 }
 
-const Pool = require('pg').Pool;
+import pkg from 'pg';
+const { Pool } = pkg;
+
 
 const db = new Pool({
   host: process.env.DB_HOST,
@@ -16,4 +18,4 @@ const db = new Pool({
   database: process.env.DB_DATABASE,
 });
 
-module.exports = db;
+ export default db;

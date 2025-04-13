@@ -1,15 +1,16 @@
 {
   "name": "to-do-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "main": "server/server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha \"server/test/tasks.test.js\"",
+    "test": "cross-env NODE_ENV=test mocha server/test/tasks.test.js",
     "start": "node server/server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Natalia Semjonova",
+  "license": "MIT",
+  "description": "A simple to-do application",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
