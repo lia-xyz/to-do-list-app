@@ -22,11 +22,11 @@ This is a simple To-Do List application for managing tasks. The app allows users
 4. Open `index.html` in your browser.
 
 ## Running tests 🧪
-The test environment uses Mocha and Chai to test API routes.
+The test environment uses Mocha and Chai to test API routes.  
 Run the test: `npm test`
 
 ## CI/CD 🔄
-This project uses GitHub Actions to run tests automatically on every push to the main branch.
+This project uses GitHub Actions to run tests automatically on every push to the main branch.  
 You can see the latest workflow runs here -> [View GitHub Actions Workflow](https://github.com/lia-xyz/to-do-list-app/actions)
 
 ## License 📄
