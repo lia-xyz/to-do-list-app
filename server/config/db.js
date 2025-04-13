@@ -1,4 +1,10 @@
-require('dotenv').config({ path: 'server/config/config.env' });
+const dotenv = require('dotenv');
+
+if (process.env.NODE_ENV === 'test') {
+  dotenv.config({ path: 'server/config/testconfig.env' });
+} else {
+  dotenv.config({ path: 'server/config/config.env' });
+}
 
 const Pool = require('pg').Pool;
 

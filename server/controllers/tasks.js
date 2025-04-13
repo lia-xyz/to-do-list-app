@@ -1,3 +1,5 @@
+const validator = require('validator');
+
 const db = require('../config/db.js');
 
 exports.getTasks = async (req, res, next) => {
@@ -15,11 +17,7 @@ exports.getTasks = async (req, res, next) => {
 
     try {
         const tasks = await db.query(query, params);
-        if(tasks.rowCount < 1) {
-            return res.status(404).send({
-                message: 'Tasks not found'
-            });
-        }
+ 
         res.status(200).json({
             status: 'Success',
             message: 'Tasks retrieved',
@@ -32,6 +30,9 @@ exports.getTasks = async (req, res, next) => {
 
 exports.addTask = async (req, res, next) => {
     const { title } = req.body;
+
+    if (!title) return res.status(400).send({status: 'Bad request', message: 'Title is required'});
+
     const query = 'INSERT INTO tasks (title) VALUES ($1) RETURNING *';
 
     try {
@@ -48,10 +49,26 @@ exports.addTask = async (req, res, next) => {
 
 exports.updateTask = async (req, res, next) => {
     const { id } = req.params;
+
+    if (!validator.isNumeric(id, { no_symbols: true }) || parseInt(id) <= 0) {
+        return res.status(400).send({
+            status: 'Bad Request',
+            message: 'Invalid task ID',
+        });
+    }
+
     const query = 'UPDATE tasks SET completed = NOT completed WHERE id = $1 RETURNING *';
 
     try {
         const updatedTask = await db.query(query, [id]);
+
+        if (updatedTask.rows.length === 0) {
+            return res.status(404).send({
+                status: 'Not Found',
+                message: `Task with this ${id} not found`,
+            });
+        }
+
         res.status(200).send({
             status: 'Success',
             message: 'Task updated',
@@ -64,18 +81,26 @@ exports.updateTask = async (req, res, next) => {
 
 exports.deleteTask = async (req, res, next) => {
     const { id } = req.params;
-    const tasksQuery = 'SELECT * FROM tasks WHERE id = $1';
-    const query = 'DELETE FROM tasks WHERE id = $1';
+
+    if (!validator.isNumeric(id, { no_symbols: true }) || parseInt(id) <= 0) {
+        return res.status(400).send({
+            status: 'Bad Request',
+            message: 'Invalid task ID',
+        });
+    }
+
+    const query = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
 
     try {
-        const record = await db.query(tasksQuery, [id]);
-        if (record.rowCount < 1) {
+        const deletedTask = await db.query(query, [id]);
+
+        if (deletedTask.rows.length === 0) {
             return res.status(404).send({
-                message: 'Record not found'
+                status: 'Not Found',
+                message: `Task with ID ${id} not found`,
             });
         }
 
-        await db.query(query, [id]);
         res.status(204).send({
             status: 'Success',
             message: 'Task deleted',
