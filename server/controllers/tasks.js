@@ -101,7 +101,7 @@ export const deleteTask = async (req, res, next) => {
             });
         }
 
-        res.status(204).send({
+        res.status(200).send({
             status: 'Success',
             message: 'Task deleted',
         });

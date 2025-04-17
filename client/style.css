@@ -15,13 +15,6 @@ body {
     border-radius: 15px;
 }
 
-button {
-    cursor: pointer;
-    border: none;
-    color: white;
-    font-family: 'Courier New';
-}
-
 #input-box, #input-button {
     border-radius: 5px;
     padding: 10px; 
@@ -45,13 +38,28 @@ button {
     margin-top: 20px;
 }
 
-#all-button, #completed-button, #uncompleted-button {
+.filter-button {
     background: none;
-    text-decoration: underline;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid white;
+    border-radius: 4px;
 }
 
-#all-button:hover, #completed-button:hover, #uncompleted-button:hover {
+.filter-button:hover {
     color: #ffffff9a;
+    text-decoration: underline;
+    border: 1px solid #ffffff9a;
+}
+
+.filter-button.selected {
+    border: 1px solid #ffffff9a;
+    color: #ffffff9a;
+}
+
+.no-tasks {
+    text-align: center;
+    border: none;
 }
 
 ul {
@@ -69,8 +77,9 @@ li {
     border-radius: 5px;
 }
 
-input[type="checkbox"] {
-    cursor: pointer;
+.completed {
+    text-decoration: line-through;
+    color: #ffffff7f;
 }
 
 .delete-button {
@@ -85,7 +94,13 @@ input[type="checkbox"] {
     background-color: #ff0000d0;
 }
 
-.completed {
-    text-decoration: line-through;
-    color: #ffffff7f;
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    color: white;
+    font-family: 'Courier New';
 }

@@ -193,7 +193,7 @@ describe('Tasks API', () => {
             const res = await request(app)
                 .delete(`/api/tasks/${sampleTaskId}`);
 
-            expect(res.status).to.equal(204);
+            expect(res.status).to.equal(200);
         });
 
         it('should return an error when deleting a non-existent task', async () => {
