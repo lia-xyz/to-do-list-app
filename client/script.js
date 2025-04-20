@@ -3,6 +3,8 @@ const API_URL = 'http://localhost:5000/api/tasks';
 let currentFilter = 'all';
 
 function setFilter(filter) {
+    clearError();
+
     currentFilter = filter;
     loadTasks();
 
@@ -33,7 +35,7 @@ function createTaskElement(task) {
     const checkbox = li.querySelector('input');
     checkbox.addEventListener('change', () => toggleTask(task.id, checkbox.checked));
 
-    const button = li.querySelector('button.delete-button');
+    const button = li.querySelector('button');
     button.addEventListener('click', () => deleteTask(task.id));
 
     return li;
@@ -42,15 +44,18 @@ function createTaskElement(task) {
 async function loadTasks() {
     try {
         let url = new URL(API_URL);
+
         if (currentFilter === 'completed') {
             url.searchParams.append('completed', 'true');
         } else if (currentFilter === 'uncompleted') {
             url.searchParams.append('completed', 'false');
         }
+
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error(`Failed to load tasks: ${response.status} ${response.statusText}`);
+            const error = await response.json();
+            throw new Error(`${response.status} ${error.error}` || 'Failed to load tasks' );
         }
 
         const data = await response.json();
@@ -59,25 +64,27 @@ async function loadTasks() {
         taskList.innerHTML = '';
 
         if(tasks.length === 0){
-            taskList.innerHTML = `<li class="no-tasks">No Tasks</li>`;
+            taskList.innerHTML = `<div class="no-tasks">No tasks</div>`;
         }
     
         tasks.forEach(task => {
             taskList.appendChild(createTaskElement(task));
         });
-
     } catch (err) {
-        console.error('Failed to load tasks:', err);
-        alert("There was an error loading tasks. Please try again.");
+        showError(err.message || 'Unexpected error');
     }
 }
 
 async function addTask() {
+    clearError();
+
     try {
         const taskInput = document.getElementById('input-box');
         const task = taskInput.value.trim();
+        
         if (!task) {
             taskInput.value = '';
+            showError('Title is required');
             return;
         }
 
@@ -88,23 +95,31 @@ async function addTask() {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to add task: ${response.status} ${response.statusText}`);
+            const error = await response.json();
+            throw new Error(`${response.status} ${error.error}` || 'Failed to create a task' );
         }
 
         const newTask = (await response.json()).data;
         taskInput.value = '';
 
         if (currentFilter === 'all' || (currentFilter === 'uncompleted' && !newTask.completed)) {
-            document.getElementById('tasks').appendChild(createTaskElement(newTask));
-        }
+            const taskList = document.getElementById('tasks');
 
+            const noTask = taskList.querySelector('.no-tasks')
+            if (noTask) {
+                noTask.remove();
+            }
+            
+            taskList.appendChild(createTaskElement(newTask));
+        }
     } catch (err) {
-        console.error('Failed to add task:', err);
-        alert("There was an error adding the task. Please try again.");
+        showError(err.message || 'Unexpected error');
     }
 }
 
 async function toggleTask(id, completed) {
+    clearError();
+
     try {
         const response = await fetch(`${API_URL}/${id}`, {
             method: 'PUT',
@@ -113,14 +128,14 @@ async function toggleTask(id, completed) {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to toggle task: ${response.status} ${response.statusText}`);
+            const error = await response.json();
+            throw new Error(`${response.status} ${error.error}` || 'Failed to update a task' );
         }
 
-        const checkbox = document.getElementById(`checkbox-${id}`);
-        const label = document.getElementById(`label-${id}`);
-        label.classList.toggle("completed", checkbox.checked);
-
         const updatedTask = await response.json();
+
+        const label = document.getElementById(`label-${id}`);
+        label.classList.toggle("completed", updatedTask.data.completed);
         
         const taskElement = document.getElementById(`checkbox-${id}`).closest('li');
 
@@ -130,28 +145,39 @@ async function toggleTask(id, completed) {
         ) {
             taskElement.remove();
         }
-
     } catch (err) {
-        console.error('Failed to toggle task:', err);
-        alert("There was an error updating the task. Please try again.");
+        showError(err.message || 'Unexpected error');
     }
 }
 
 async function deleteTask(id) {
+    clearError();
+
     try {
         const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete task: ${response.status} ${response.statusText}`);
+            const error = await response.json();
+            throw new Error(`${response.status} ${error.error}` || 'Failed to delete a task' );
         }
 
-        const taskElement = document.getElementById(`checkbox-${id}`).closest('li');
-        taskElement.remove();
+        loadTasks();
 
     } catch (err) {
-        console.error('Failed to delete task:', err);
-        alert("There was an error deleting the task. Please try again.");
+        showError(err.message || 'Unexpected error');
     }
+}
+
+function showError(message) {
+    const errorBox = document.getElementById('error-message');
+    errorBox.textContent = message;
+    errorBox.classList.add('visible');
+}
+
+function clearError() {
+    const errorBox = document.getElementById('error-message');
+    errorBox.textContent = '';
+    errorBox.classList.remove('visible');
 }
 
 function setupEventListeners() {

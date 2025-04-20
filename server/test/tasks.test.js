@@ -59,7 +59,7 @@ describe('Tasks API', () => {
                 .send(taskPayload);
 
             expect(res.status).to.equal(400);
-            expect(res.body).to.have.property('message').that.contains('Title is required');
+            expect(res.body).to.have.property('error').that.contains('Title is required');
         });
 
     });
@@ -107,25 +107,6 @@ describe('Tasks API', () => {
 
     describe('PUT /api/tasks/:id', () => {
 
-        it('should toggle a task', async () => {
-            let sampleTaskId;
-            let sampleTaskInitialCompletedStatus;
-            console.log('Creating a new task...');
-            try{
-                const sampleTask = await db.query("INSERT INTO tasks (title) VALUES ('Sample Task') RETURNING *");
-                sampleTaskId = sampleTask.rows[0].id;
-                sampleTaskInitialCompletedStatus = sampleTask.rows[0].completed;
-            } catch (err) {
-                console.error(err);
-            }
-
-            const res = await request(app)
-                .put(`/api/tasks/${sampleTaskId}`);
-            
-                expect(res.status).to.equal(200);
-                expect(res.body.data.completed).to.not.equal(sampleTaskInitialCompletedStatus);
-        });
-
         it('should update a task to completed', async () => {
             let uncompletedTaskId;
             console.log('Creating a new task...');
@@ -137,7 +118,9 @@ describe('Tasks API', () => {
             }
 
             const res = await request(app)
-                .put(`/api/tasks/${uncompletedTaskId}`);
+                .put(`/api/tasks/${uncompletedTaskId}`)
+                .set('Content-Type', 'application/json')
+                .send({ completed: true });
             
                 expect(res.status).to.equal(200);
                 expect(res.body.data.completed).to.be.true;
@@ -154,7 +137,9 @@ describe('Tasks API', () => {
             }
 
             const res = await request(app)
-                .put(`/api/tasks/${completedTaskId}`);
+                .put(`/api/tasks/${completedTaskId}`)
+                .set('Content-Type', 'application/json')
+                .send({ completed: false });
             
                 expect(res.status).to.equal(200);
                 expect(res.body.data.completed).to.be.false;
@@ -162,18 +147,85 @@ describe('Tasks API', () => {
 
         it('should return an error when updating a non-existent task', async () => {
             const res = await request(app)
-                .put('/api/tasks/99999');
+                .put('/api/tasks/99999')
+                .set('Content-Type', 'application/json')
+                .send({ completed: true });
         
             expect(res.status).to.equal(404);
-            expect(res.body.message).to.include('not found');
+            expect(res.body.error).to.include('not found');
         });
 
         it('should return an error for invalid task ID', async () => {
             const res = await request(app)
-                .put('/api/tasks/abc');
+                .put('/api/tasks/abc')
+                .set('Content-Type', 'application/json')
+                .send({ completed: true });
         
             expect(res.status).to.equal(400);
-            expect(res.body.message).to.include('Invalid task ID');
+            expect(res.body.error).to.include('Invalid task ID');
+        });
+
+        it('should return an error for invalid completed status (sending a string)', async () => {
+            let taskPayload = { completed: "abc" };
+
+            let sampleTaskId;
+            console.log('Creating a new task...');
+            try {
+                const sampleTask = await db.query("INSERT INTO tasks (title, completed) VALUES ('Sample Task', false) RETURNING id");
+                sampleTaskId = sampleTask.rows[0].id;
+            } catch (err) {
+                console.error(err);
+            }
+
+            const res = await request(app)
+                .put(`/api/tasks/${sampleTaskId}`)
+                .set('Content-Type', 'application/json')
+                .send(taskPayload);
+        
+            expect(res.status).to.equal(400);
+            expect(res.body.error).to.include('Invalid completed status');
+        });
+
+        it('should return an error for invalid completed status (sending numbers)', async () => {
+            let taskPayload = { completed: 1 };
+
+            let sampleTaskId;
+            console.log('Creating a new task...');
+            try {
+                const sampleTask = await db.query("INSERT INTO tasks (title, completed) VALUES ('Sample Task', false) RETURNING id");
+                sampleTaskId = sampleTask.rows[0].id;
+            } catch (err) {
+                console.error(err);
+            }
+
+            const res = await request(app)
+                .put(`/api/tasks/${sampleTaskId}`)
+                .set('Content-Type', 'application/json')
+                .send(taskPayload);
+        
+            expect(res.status).to.equal(400);
+            expect(res.body.error).to.include('Invalid completed status');
+        });
+
+        it('should return an error for missig completed status', async () => {
+            let taskPayload = {};
+
+            let sampleTaskId;
+            console.log('Creating a new task...');
+            try {
+                const sampleTask = await db.query("INSERT INTO tasks (title, completed) VALUES ('Sample Task', false) RETURNING id");
+                sampleTaskId = sampleTask.rows[0].id;
+            } catch (err) {
+                console.error(err);
+            }
+
+            const res = await request(app)
+                .put(`/api/tasks/${sampleTaskId}`)
+                .set('Content-Type', 'application/json')
+                .send(taskPayload);
+        
+            expect(res.status).to.equal(400);
+            expect(res.body.error).to.include('Invalid completed status');
         });
 
     });
@@ -201,7 +253,7 @@ describe('Tasks API', () => {
                 .delete('/api/tasks/99999');
         
             expect(res.status).to.equal(404);
-            expect(res.body.message).to.include('not found');
+            expect(res.body.error).to.include('not found');
         });
 
         it('should return an error for invalid task ID', async () => {
@@ -209,7 +261,7 @@ describe('Tasks API', () => {
                 .delete('/api/tasks/abc');
         
             expect(res.status).to.equal(400);
-            expect(res.body.message).to.include('Invalid task ID');
+            expect(res.body.error).to.include('Invalid task ID');
         });
 
     });

@@ -18,20 +18,22 @@ export const getTasks = async (req, res, next) => {
     try {
         const tasks = await db.query(query, params);
  
-        res.status(200).json({
+        res.status(200).send({
             status: 'Success',
             message: 'Tasks retrieved',
             data: tasks.rows,
         });
     } catch (err) {
-        return res.status(500).send({error: err.message});
+        return res.status(500).send({ error: 'Server error during processing your request.' });
     }
 };
 
 export const addTask = async (req, res, next) => {
     const { title } = req.body;
 
-    if (!title) return res.status(400).send({status: 'Bad request', message: 'Title is required'});
+    const trimmedTitle = title?.trim() || '';
+
+    if (validator.isEmpty(trimmedTitle)) return res.status(400).send({ error: 'Title is required' });
 
     const query = 'INSERT INTO tasks (title) VALUES ($1) RETURNING *';
 
@@ -43,30 +45,29 @@ export const addTask = async (req, res, next) => {
             data: newTask.rows[0],
         });
     } catch (err) {
-        return res.status(500).send({error: err.message});
+        return res.status(500).send({ error: 'Server error during processing your request.' });
     }
 };
 
 export const updateTask = async (req, res, next) => {
     const { id } = req.params;
+    const { completed } = req.body;
 
     if (!validator.isNumeric(id, { no_symbols: true }) || parseInt(id) <= 0) {
-        return res.status(400).send({
-            status: 'Bad Request',
-            message: 'Invalid task ID',
-        });
+        return res.status(400).send({ error: 'Invalid task ID' });
     }
 
-    const query = 'UPDATE tasks SET completed = NOT completed WHERE id = $1 RETURNING *';
+    if (typeof completed !== 'boolean') {
+        return res.status(400).send({ error: 'Invalid completed status' });
+    }
+
+    const query = 'UPDATE tasks SET completed = $1 WHERE id = $2 RETURNING *';
 
     try {
-        const updatedTask = await db.query(query, [id]);
+        const updatedTask = await db.query(query, [completed, id]);
 
         if (updatedTask.rows.length === 0) {
-            return res.status(404).send({
-                status: 'Not Found',
-                message: `Task with this ${id} not found`,
-            });
+            return res.status(404).send({ error: 'Task not found' });
         }
 
         res.status(200).send({
@@ -75,7 +76,7 @@ export const updateTask = async (req, res, next) => {
             data: updatedTask.rows[0],
         });
     } catch (err) {
-        return res.status(500).send({error: err.message});
+        return res.status(500).send({ error: 'Server error during processing your request.' });
     }
 };
 
@@ -83,10 +84,7 @@ export const deleteTask = async (req, res, next) => {
     const { id } = req.params;
 
     if (!validator.isNumeric(id, { no_symbols: true }) || parseInt(id) <= 0) {
-        return res.status(400).send({
-            status: 'Bad Request',
-            message: 'Invalid task ID',
-        });
+        return res.status(400).send({ error: 'Invalid task ID' });
     }
 
     const query = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
@@ -95,10 +93,7 @@ export const deleteTask = async (req, res, next) => {
         const deletedTask = await db.query(query, [id]);
 
         if (deletedTask.rows.length === 0) {
-            return res.status(404).send({
-                status: 'Not Found',
-                message: `Task with ID ${id} not found`,
-            });
+            return res.status(404).send({ error: 'Task not found' });
         }
 
         res.status(200).send({
@@ -106,6 +101,6 @@ export const deleteTask = async (req, res, next) => {
             message: 'Task deleted',
         });
     } catch (err) {
-        return res.status(500).send({error: err.message});
+        return res.status(500).send({ error: 'Server error during processing your request.' });
     }
 };

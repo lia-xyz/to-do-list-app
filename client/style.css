@@ -1,106 +1,143 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
-    margin-top: 50px;
-    text-align: center;
-    font-family: 'Courier New';
     background-color: #7094C4;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
     color: white;
 }
 
-#full-app { 
-    background-color: #436da3;
-    width: 500px;
-    margin: 0 auto;
+#full-app {
+    margin: 50px auto;
     padding: 20px;
+    width: 500px;
+    background-color: #436da3;
     border: 2px solid white;
     border-radius: 15px;
 }
 
-#input-box, #input-button {
-    border-radius: 5px;
-    padding: 10px; 
+#header {
+    margin: 30px 0;
+    font-family: 'Brush Script MT', cursive;
+    font-size: 35px;
+}
+
+#input-task {
+    margin: 10px 0;
 }
 
 #input-box {
-    width: 200px;
+    padding: 10px; 
+    width: 250px;
     border: 1px solid #7094C4;
-    font-family: 'Courier New';
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 #input-button {
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
     background-color: #7094C4;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all 0.5s ease;
 }
 
 #input-button:hover {
-    background-color: #7094c485;
-}
-
-#task-list {
-    margin-top: 20px;
+    background-color: rgb(112, 148, 196, 0.5);
 }
 
 .filter-button {
+    cursor: pointer;
+    padding: 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
     background: none;
-    padding: 10px 20px;
-    margin: 5px;
-    border: 1px solid white;
-    border-radius: 4px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all 0.5s ease;
 }
 
 .filter-button:hover {
-    color: #ffffff9a;
-    text-decoration: underline;
-    border: 1px solid #ffffff9a;
+    background-color: #5782b9;
 }
 
 .filter-button.selected {
-    border: 1px solid #ffffff9a;
-    color: #ffffff9a;
+    text-decoration: underline;
 }
 
-.no-tasks {
-    text-align: center;
-    border: none;
+#task-list {
+    margin-bottom: 30px;
 }
 
 ul {
     list-style: none;
-    padding: 0;
     text-align: left;
-    margin-top: 20px;
 }
 
 li {
+    display: flex;
     margin-top: 10px;
-    margin-bottom: 10px;
     padding: 10px;
     border: 1px solid white;
     border-radius: 5px;
 }
 
-.completed {
-    text-decoration: line-through;
-    color: #ffffff7f;
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #7094C4;
+}
+
+label {
+    flex: 1;
+    margin: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .delete-button {
     float: right;
+    cursor: pointer;
+    padding: 0 5px;
+    border: none;
     background: none;
-    border-radius: 3px;
-    width: 20px;
-    height: 20px;
+    color: white;
+    transition: all 0.5s ease;
 }
 
 .delete-button:hover {
-    background-color: #ff0000d0;
+    color: #ff4d4f;
 }
 
-input[type="checkbox"] {
-    cursor: pointer;
+.completed {
+    text-decoration: line-through;
+    color: rgb(255, 255, 255, 0.5);
 }
 
-button {
-    cursor: pointer;
-    border: none;
-    color: white;
-    font-family: 'Courier New';
+.no-tasks {
+    text-align: center;
+    margin: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#error-message {
+    display: none;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(255, 208, 208, 0.75);
+    color: #ff4d4f;
+    font-size: small;
+}
+
+#error-message.visible {
+    display: inline-block;
 }

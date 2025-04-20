@@ -11,23 +11,22 @@
             <h1>To-Do List</h1>
         </div>
 
+        <div id="error-message" class="hidden"></div>
+
         <div id="input-task">
             <input type="text" id="input-box" name="input_box" placeholder="Add a new task"/>
             <button id="input-button">Add</button>
         </div>
 
-        <div id="task-list">
-
-            <div id="filter">
-                <button class="filter-button" id="all-button">All</button>
-                <button class="filter-button" id="completed-button">Completed</button>
-                <button class="filter-button" id="uncompleted-button">Uncompleted</button>
-            </div>
-
-            <ul id="tasks"></ul>
-
+        <div id="filter">
+            <button class="filter-button" id="all-button">All</button>
+            <button class="filter-button" id="completed-button">Completed</button>
+            <button class="filter-button" id="uncompleted-button">Uncompleted</button>
         </div>
 
+        <div id="task-list">
+            <ul id="tasks"></ul>
+        </div>
     </div>
 
     <script src="script.js" type="text/javascript"></script>
