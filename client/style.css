@@ -73,10 +73,6 @@ body {
     text-decoration: underline;
 }
 
-#task-list {
-    margin-bottom: 30px;
-}
-
 ul {
     list-style: none;
     text-align: left;
@@ -122,11 +118,12 @@ label {
     color: rgb(255, 255, 255, 0.5);
 }
 
-.no-tasks {
-    text-align: center;
-    margin: 20px;
-    font-size: 20px;
-    font-weight: bold;
+hr {
+    margin: 20px 0;
+}
+
+#counter {
+    margin-bottom: 30px;
 }
 
 #error-message {

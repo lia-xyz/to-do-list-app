@@ -20,8 +20,29 @@ export const getTasks = async (req, res, next) => {
  
         res.status(200).send({
             status: 'Success',
-            message: 'Tasks retrieved',
+            message: 'Get all tasks',
             data: tasks.rows,
+        });
+    } catch (err) {
+        return res.status(500).send({ error: 'Server error during processing your request.' });
+    }
+};
+
+export const getTaskStats = async (req, res, next) => {
+    const query = 'SELECT COUNT(*) FILTER (WHERE completed = true) AS completed, COUNT(*) FILTER (WHERE completed = false) AS uncompleted FROM tasks';
+
+    try {
+        const response = await db.query(query);
+
+        const data = response.rows[0];
+
+        res.status(200).send({
+            status: 'Success',
+            message: 'Get task stats',
+            data: {
+                completed: Number(data.completed),
+                uncompleted: Number(data.uncompleted),
+            },
         });
     } catch (err) {
         return res.status(500).send({ error: 'Server error during processing your request.' });
@@ -41,7 +62,7 @@ export const addTask = async (req, res, next) => {
         const newTask = await db.query(query, [title]);
         res.status(201).send({
             status: 'Success',
-            message: 'New task created',
+            message: 'Create new task',
             data: newTask.rows[0],
         });
     } catch (err) {
@@ -72,7 +93,7 @@ export const updateTask = async (req, res, next) => {
 
         res.status(200).send({
             status: 'Success',
-            message: 'Task updated',
+            message: 'Update a task',
             data: updatedTask.rows[0],
         });
     } catch (err) {
@@ -98,7 +119,7 @@ export const deleteTask = async (req, res, next) => {
 
         res.status(200).send({
             status: 'Success',
-            message: 'Task deleted',
+            message: 'Delete a task',
         });
     } catch (err) {
         return res.status(500).send({ error: 'Server error during processing your request.' });

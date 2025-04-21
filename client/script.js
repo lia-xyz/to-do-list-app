@@ -62,10 +62,6 @@ async function loadTasks() {
         const tasks = data.data;
         const taskList = document.getElementById('tasks');
         taskList.innerHTML = '';
-
-        if(tasks.length === 0){
-            taskList.innerHTML = `<div class="no-tasks">No tasks</div>`;
-        }
     
         tasks.forEach(task => {
             taskList.appendChild(createTaskElement(task));
@@ -104,14 +100,11 @@ async function addTask() {
 
         if (currentFilter === 'all' || (currentFilter === 'uncompleted' && !newTask.completed)) {
             const taskList = document.getElementById('tasks');
-
-            const noTask = taskList.querySelector('.no-tasks')
-            if (noTask) {
-                noTask.remove();
-            }
             
             taskList.appendChild(createTaskElement(newTask));
         }
+
+        loadTaskStats();
     } catch (err) {
         showError(err.message || 'Unexpected error');
     }
@@ -145,6 +138,8 @@ async function toggleTask(id, completed) {
         ) {
             taskElement.remove();
         }
+
+        loadTaskStats();
     } catch (err) {
         showError(err.message || 'Unexpected error');
     }
@@ -161,8 +156,31 @@ async function deleteTask(id) {
             throw new Error(`${response.status} ${error.error}` || 'Failed to delete a task' );
         }
 
-        loadTasks();
+        const taskElement = document.getElementById(`checkbox-${id}`).closest('li');
+        taskElement.remove();
 
+        loadTaskStats();
+    } catch (err) {
+        showError(err.message || 'Unexpected error');
+    }
+}
+
+async function loadTaskStats() {
+    try {
+        const response = await fetch(`${API_URL}/stats`);
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(`${response.status} ${error.error}` || 'Failed to load task stats' );
+        }
+    
+        const data = await response.json();
+        const stats = data.data;
+
+        console.log(data);
+    
+        document.getElementById('completed-counter').textContent = stats.completed;
+        document.getElementById('uncompleted-counter').textContent = stats.uncompleted;
     } catch (err) {
         showError(err.message || 'Unexpected error');
     }
@@ -198,6 +216,7 @@ function setupEventListeners() {
 function init() {
     setupEventListeners();
     loadTasks();
+    loadTaskStats();
 }
 
 init();

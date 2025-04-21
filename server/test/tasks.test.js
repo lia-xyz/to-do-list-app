@@ -8,7 +8,6 @@ describe('Tasks API', () => {
     before(async () => {
         console.log('Setting up database...');
         try {
-            // Create the tasks table if it doesn't exist
             await db.query(`
                 CREATE TABLE IF NOT EXISTS tasks (
                     id SERIAL PRIMARY KEY,
@@ -66,7 +65,8 @@ describe('Tasks API', () => {
 
     describe('GET /api/tasks', () => {
 
-        beforeEach( async () => {            console.log('Creating new test tasks...');
+        beforeEach( async () => {
+            console.log('Creating new test tasks...');
             try{
                 await db.query("INSERT INTO tasks (title) VALUES ('Sample Task')");
                 await db.query("INSERT INTO tasks (title, completed) VALUES ('Completed Task', true)");
@@ -102,6 +102,32 @@ describe('Tasks API', () => {
             res.body.data.forEach(task => {
                 expect(task.completed).to.be.false;
             });
+        });
+    });
+
+    describe('GET /api/tasks/stats', () => {
+
+        beforeEach( async () => {
+            console.log('Creating new test tasks...');
+            try{
+                await db.query("INSERT INTO tasks (title) VALUES ('Sample Task')");
+                await db.query("INSERT INTO tasks (title, completed) VALUES ('Completed Task', true)");
+                await db.query("INSERT INTO tasks (title, completed) VALUES ('Uncompleted Task', false)");
+            } catch(err){
+                console.error(err);
+            }
+        });
+
+        it('should get task stats', async () => {
+            const res = await request(app)
+                .get('/api/tasks/stats');
+            
+            expect(res.status).to.equal(200);
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.have.property('completed');
+            expect(res.body.data).to.have.property('uncompleted');
+            expect(res.body.data.completed).to.equal(1);
+            expect(res.body.data.uncompleted).to.equal(2);
         });
     });
 

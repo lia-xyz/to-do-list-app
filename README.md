@@ -7,6 +7,7 @@ This is a simple To-Do List application for managing tasks. The app allows users
 - Add and delete tasks
 - Mark tasks as completed or uncompleted
 - Filter tasks by status (completed, uncompleted)
+- Counter of completed and uncompleted tasks
 
 ## Technologies Used 🛠️
 - **Front-End:** HTML, CSS, JavaScript
@@ -21,6 +22,7 @@ This is a simple To-Do List application for managing tasks. The app allows users
 - `GET /tasks` – Get all tasks
 - `GET /tasks?completed=true` – Get only completed tasks
 - `GET /tasks?completed=false` – Get only uncompleted tasks
+- `GET /tasks/stats` – Get task stats
 - `POST /tasks` – Create a new task
 - `PUT /tasks/:id` – Update a task (mark task as completed or uncompleted)
 - `DELETE /tasks/:id` – Delete a task
