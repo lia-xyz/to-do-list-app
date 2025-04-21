@@ -9,16 +9,18 @@ This is a simple To-Do List application for managing tasks. The app allows users
 - Filter tasks by status (completed, uncompleted)
 
 ## Technologies Used 🛠️
-- Front-End: HTML, CSS, JavaScript
-- Back-End: Node.js, Express
-- Database: PostgreSQL
-- Testing: Mocha, Chai
-- CI/CD: GitHub Actions
+- **Front-End:** HTML, CSS, JavaScript
+- **Back-End:** Node.js, Express
+- **Database:** PostgreSQL
+- **Testing:** Mocha, Chai
+- **CI/CD:** GitHub Actions
 
 ## API Endpoints
 
 ### Tasks
-- `GET /tasks` – Get all public tasks
+- `GET /tasks` – Get all tasks
+- `GET /tasks?completed=true` – Get only completed tasks
+- `GET /tasks?completed=false` – Get only uncompleted tasks
 - `POST /tasks` – Create a new task
 - `PUT /tasks/:id` – Update a task (mark task as completed or uncompleted)
 - `DELETE /tasks/:id` – Delete a task
