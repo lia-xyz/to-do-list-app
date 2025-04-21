@@ -181,6 +181,11 @@ async function loadTaskStats() {
     
         document.getElementById('completed-counter').textContent = stats.completed;
         document.getElementById('uncompleted-counter').textContent = stats.uncompleted;
+
+        const total = stats.completed + stats.uncompleted;
+        const progress = (stats.completed / total) * 100;
+
+        document.getElementById("progress-bar").style.width = `${progress}%`;
     } catch (err) {
         showError(err.message || 'Unexpected error');
     }
