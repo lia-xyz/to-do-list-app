@@ -16,7 +16,7 @@ body {
     padding: 20px;
     width: 500px;
     background-color: #436da3;
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 15px;
 }
 
@@ -27,13 +27,13 @@ body {
 }
 
 #input-task {
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 #input-box {
     padding: 10px; 
     width: 250px;
-    border: 1px solid #7094C4;
+    border: 2px solid #7094C4;
     border-radius: 5px;
     font-family: 'Courier New', Courier, monospace;
 }
@@ -41,7 +41,7 @@ body {
 #input-button {
     cursor: pointer;
     padding: 10px;
-    border: none;
+    border: 2px solid #7094C4;
     border-radius: 5px;
     background-color: #7094C4;
     color: white;
@@ -53,13 +53,17 @@ body {
     background-color: rgb(112, 148, 196, 0.5);
 }
 
+#input-button:active {
+    background-color: rgb(112, 148, 196, 0);
+}
+
 #progress {
     width: 100%;
     height: 10px;
     margin-top: 20px;
     margin-bottom: 10px;
     background-color: white;
-    border: 1px solid #7094C4;
+    border: 2px solid #7094C4;
     border-radius: 5px;
 }
 
@@ -85,6 +89,10 @@ body {
 
 .filter-button:hover {
     background-color: #5782b9;
+}
+
+.filter-button:active {
+    background-color: #7fa3d3;
 }
 
 .filter-button.selected {
@@ -129,6 +137,10 @@ label {
 
 .delete-button:hover {
     color: #ff4d4f;
+}
+
+.delete-button:active {
+    color: #ce1d26;
 }
 
 .completed {
