@@ -192,15 +192,17 @@ async function loadTaskStats() {
 }
 
 function showError(message) {
-    const errorBox = document.getElementById('error-message');
-    errorBox.textContent = message;
-    errorBox.classList.add('visible');
+    const error = document.getElementById('error');
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = message;
+    error.classList.add('visible');
 }
 
 function clearError() {
-    const errorBox = document.getElementById('error-message');
-    errorBox.textContent = '';
-    errorBox.classList.remove('visible');
+    const error = document.getElementById('error');
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = '';
+    error.classList.remove('visible');
 }
 
 function setupEventListeners() {
@@ -216,6 +218,8 @@ function setupEventListeners() {
     document.getElementById('all-button').addEventListener('click', () => setFilter('all'));
     document.getElementById('completed-button').addEventListener('click', () => setFilter('completed'));
     document.getElementById('uncompleted-button').addEventListener('click', () => setFilter('uncompleted'));
+
+    document.getElementById('error-button').addEventListener('click', clearError);
 }
 
 function init() {
